@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Patient Satisfaction Predictor</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Patient Satisfaction Predictor</h1>
+
+      {% if error %}
+        <div class="error">Error: {{ error }}</div>
+      {% endif %}
+
+      <form method="post">
+        <label>Length Of Stay (days)</label>
+        <input name="LengthOfStay" type="number" step="0.1" required>
+
+        <label>Service</label>
+        <select name="Service" required>
+          {% if services %}
+            {% for s in services %}
+              <option value="{{ s }}">{{ s }}</option>
+            {% endfor %}
+          {% else %}
+            <option value="emergency">emergency</option>
+            <option value="surgery">surgery</option>
+            <option value="general_medicine">general_medicine</option>
+            <option value="ICU">ICU</option>
+          {% endif %}
+        </select>
+
+        <label>Beds Available</label>
+        <input name="BedsAvailable" type="number" step="1" required>
+
+        <label>Patient Demand</label>
+        <input name="PatientDemand" type="number" step="1" required>
+
+        <label>Staff Assigned (ActualStaffPresent)</label>
+        <input name="StaffAssigned" type="number" step="1" required>
+
+        <button type="submit">Predict</button>
+      </form>
+
+      {% if prediction is not none %}
+        <div class="result">
+          <h2>Predicted SatisfactionScore: {{ prediction }}</h2>
+        </div>
+      {% endif %}
+
+      <p class="note">Tip: StaffAssigned should be the actual staff present during that week for that service.</p>
+    </div>
+  </body>
+</html>
